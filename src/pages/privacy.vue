@@ -6,26 +6,26 @@
 
     <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-8 shadow-sm dark:shadow-none prose prose-gray dark:prose-invert max-w-none">
       <h1 class="text-2xl font-bold tracking-tight mb-1">Privacy Policy</h1>
-      <p class="text-sm text-gray-400 dark:text-zinc-500 mb-8">Last updated: June 3, 2025</p>
+      <p class="text-sm text-gray-400 dark:text-zinc-500 mb-8">Last updated: June 19, 2025</p>
 
       <section class="mb-8">
         <h2 class="text-lg font-semibold mb-3">What TrimBox does</h2>
-        <p class="text-gray-600 dark:text-zinc-400 text-sm leading-relaxed">TrimBox connects to your Gmail account to scan your inbox for mailing list subscriptions. It reads email headers (sender addresses, subject lines, and List-Unsubscribe headers) to identify who has been sending you bulk email and surfaces unsubscribe links so you can opt out easily.</p>
+        <p class="text-gray-600 dark:text-zinc-400 text-sm leading-relaxed">TrimBox connects to your Gmail account to scan your inbox for mailing list subscriptions. It reads email headers (sender addresses, subject lines, and List-Unsubscribe headers) to identify who has been sending you bulk email and surfaces unsubscribe links so you can opt out easily. At your explicit request, TrimBox can also archive or move emails from selected senders to trash in bulk.</p>
       </section>
 
       <section class="mb-8">
         <h2 class="text-lg font-semibold mb-3">Data we access</h2>
-        <p class="text-gray-600 dark:text-zinc-400 text-sm leading-relaxed mb-3">TrimBox requests read-only access to your Gmail account (<code class="text-xs bg-gray-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">gmail.metadata</code> scope). We only read:</p>
+        <p class="text-gray-600 dark:text-zinc-400 text-sm leading-relaxed mb-3">TrimBox requests access to your Gmail account (<code class="text-xs bg-gray-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded">gmail.modify</code> scope) in order to read message headers during scanning and to archive or trash emails when you explicitly request it. We only read:</p>
         <ul class="list-disc list-inside text-gray-600 dark:text-zinc-400 text-sm space-y-1.5 ml-1">
-          <li>Email headers (From, Subject, List-Unsubscribe)</li>
+          <li>Email headers (From, List-Unsubscribe)</li>
           <li>Your Gmail address (to display your signed-in account)</li>
         </ul>
-        <p class="text-gray-600 dark:text-zinc-400 text-sm leading-relaxed mt-3">We do not read email body content.</p>
+        <p class="text-gray-600 dark:text-zinc-400 text-sm leading-relaxed mt-3">We do not read email body content. Write actions (archive, trash) are only performed on messages belonging to senders you select and only when you click the corresponding action.</p>
       </section>
 
       <section class="mb-8">
         <h2 class="text-lg font-semibold mb-3">Data we store</h2>
-        <p class="text-gray-600 dark:text-zinc-400 text-sm leading-relaxed">We do not store any of your email data on our servers. All scanning happens in memory during your session and is discarded when you close the tab or sign out. We store a short-lived access token in an HTTP-only cookie solely to authenticate your scan request — it expires after one hour.</p>
+        <p class="text-gray-600 dark:text-zinc-400 text-sm leading-relaxed">We do not store any of your email data on our servers. All scanning happens in memory during your session and is discarded when you close the tab or sign out. We store a short-lived access token in an HTTP-only cookie solely to authenticate your scan request. It expires after one hour.</p>
       </section>
 
       <section class="mb-8">

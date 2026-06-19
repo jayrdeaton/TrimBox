@@ -6,6 +6,7 @@ interface SenderInfo {
   count: number
   latestSeen: number
   unsubscribeUrls: string[]
+  messageIds: string[]
 }
 
 interface SenderAggregate {
@@ -14,6 +15,7 @@ interface SenderAggregate {
   count: number
   latestSeen: number
   unsubscribeStats: Map<string, { count: number; lastSeen: number }>
+  messageIds: string[]
 }
 
 type MailboxScope = 'primary' | 'spam' | 'trash'
@@ -156,6 +158,8 @@ export default defineEventHandler(async (event) => {
   const includeSpam = parseBooleanQuery(query.includeSpam as string | string[] | undefined, false)
   const includeTrash = parseBooleanQuery(query.includeTrash as string | string[] | undefined, false)
   const promotionsOnly = parseBooleanQuery(query.promotionsOnly as string | string[] | undefined, false)
+  const unreadOnly = parseBooleanQuery(query.unreadOnly as string | string[] | undefined, false)
+  const dateRange = parseEnumQuery(query.dateRange as string | string[] | undefined, ['all', '1y', '3m'] as const, 'all')
   const minCount = parseNumberQuery(query.minCount as string | string[] | undefined, 1, 1)
   const groupBy = parseEnumQuery(query.groupBy as string | string[] | undefined, ['domain', 'exact'] as const, 'domain')
   const sortBy = parseEnumQuery(query.sortBy as string | string[] | undefined, ['count', 'newest'] as const, 'count')
@@ -180,7 +184,19 @@ export default defineEventHandler(async (event) => {
     auth.setCredentials({ access_token: token })
 
     const gmail = google.gmail({ version: 'v1', auth })
-    const queryFilter = promotionsOnly ? 'category:promotions' : undefined
+    const queryParts: string[] = []
+    if (promotionsOnly) queryParts.push('category:promotions')
+    if (unreadOnly) queryParts.push('is:unread')
+    if (dateRange !== 'all') {
+      const cutoff = new Date()
+      if (dateRange === '1y') cutoff.setFullYear(cutoff.getFullYear() - 1)
+      else if (dateRange === '3m') cutoff.setMonth(cutoff.getMonth() - 3)
+      const yyyy = cutoff.getFullYear()
+      const mm = String(cutoff.getMonth() + 1).padStart(2, '0')
+      const dd = String(cutoff.getDate()).padStart(2, '0')
+      queryParts.push(`after:${yyyy}/${mm}/${dd}`)
+    }
+    const queryFilter = queryParts.length > 0 ? queryParts.join(' ') : undefined
 
     send({ type: 'progress', message: 'Connecting to Gmail...' })
 
@@ -237,8 +253,10 @@ export default defineEventHandler(async (event) => {
         )
       )
 
-      for (const result of results) {
-        if (result.status !== 'fulfilled') continue
+      for (let j = 0; j < results.length; j++) {
+        const result = results[j]
+        const msgId = batch[j]!
+        if (!result || result.status !== 'fulfilled') continue
         const headers = result.value.data.payload?.headers || []
 
         const fromHeader = headers.find((h) => h.name?.toLowerCase() === 'from')?.value || ''
@@ -266,6 +284,7 @@ export default defineEventHandler(async (event) => {
         const existing = senderMap.get(senderKey)
         if (existing) {
           existing.count++
+          existing.messageIds.push(msgId)
           if (messageTimestamp >= existing.latestSeen) {
             existing.latestSeen = messageTimestamp
             existing.name = name
@@ -291,7 +310,8 @@ export default defineEventHandler(async (event) => {
             email: senderKey,
             count: 1,
             latestSeen: messageTimestamp,
-            unsubscribeStats
+            unsubscribeStats,
+            messageIds: [msgId]
           })
         }
       }
@@ -309,7 +329,8 @@ export default defineEventHandler(async (event) => {
         email: sender.email,
         count: sender.count,
         latestSeen: sender.latestSeen,
-        unsubscribeUrls: sortUnsubscribeUrls(sender.unsubscribeStats)
+        unsubscribeUrls: sortUnsubscribeUrls(sender.unsubscribeStats),
+        messageIds: sender.messageIds
       }))
       .sort((a, b) => {
         if (sortBy === 'newest') {

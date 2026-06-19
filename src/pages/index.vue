@@ -3,7 +3,7 @@
     <!-- Hero -->
     <div class="mb-10 text-center">
       <h1 class="text-4xl font-bold tracking-tight mb-3">Find every mailing list in your inbox.</h1>
-      <p class="text-gray-500 dark:text-zinc-400 text-lg leading-relaxed">Sign in with Google to scan your inbox and discover who's been sending you email.</p>
+      <p v-if="status === 'idle'" class="text-gray-500 dark:text-zinc-400 text-lg leading-relaxed">Sign in with Google to scan your inbox, find every mailing list, and clean it up in bulk.</p>
     </div>
 
     <!-- Landing: not signed in -->
@@ -19,13 +19,13 @@
           </svg>
           Connect Gmail
         </a>
-        <p class="mt-4 text-sm text-gray-400 dark:text-zinc-500">Read-only access. Your email content never leaves Google's servers.</p>
+        <p class="mt-4 text-sm text-gray-400 dark:text-zinc-500">Your email content is never read or stored. Archive and trash actions only run when you ask.</p>
       </div>
 
       <!-- How it works -->
       <div class="mt-8 space-y-6">
         <h2 class="text-lg font-semibold text-center text-gray-700 dark:text-zinc-200">How TrimBox works</h2>
-        <div class="grid gap-4 sm:grid-cols-3">
+        <div class="grid gap-4 sm:grid-cols-2">
           <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm dark:shadow-none">
             <div class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-950 flex items-center justify-center mb-3">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-500" aria-hidden="true">
@@ -60,11 +60,22 @@
             <h3 class="text-sm font-semibold text-gray-800 dark:text-zinc-100 mb-1">One-click unsubscribe links</h3>
             <p class="text-sm text-gray-500 dark:text-zinc-400">Unsubscribe links are extracted directly from email headers and displayed alongside each sender, so you can opt out without digging through your inbox.</p>
           </div>
+          <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm dark:shadow-none">
+            <div class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-950 flex items-center justify-center mb-3">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-500" aria-hidden="true">
+                <polyline points="21 8 21 21 3 21 3 8" />
+                <rect x="1" y="3" width="22" height="5" />
+                <line x1="10" y1="12" x2="14" y2="12" />
+              </svg>
+            </div>
+            <h3 class="text-sm font-semibold text-gray-800 dark:text-zinc-100 mb-1">Clean up in bulk</h3>
+            <p class="text-sm text-gray-500 dark:text-zinc-400">Select senders from the results and archive or move their emails to trash with one click, without leaving the app.</p>
+          </div>
         </div>
 
         <!-- Privacy callout -->
         <div class="bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800 rounded-xl px-5 py-4 text-sm text-gray-500 dark:text-zinc-400 space-y-1">
-          <p><span class="font-medium text-gray-700 dark:text-zinc-200">Gmail permission used:</span> Read-only access (<code class="text-xs bg-gray-100 dark:bg-zinc-800 px-1 py-0.5 rounded">https://www.googleapis.com/auth/gmail.metadata</code>) to fetch message metadata and headers.</p>
+          <p><span class="font-medium text-gray-700 dark:text-zinc-200">Gmail permission used:</span> <code class="text-xs bg-gray-100 dark:bg-zinc-800 px-1 py-0.5 rounded">https://www.googleapis.com/auth/gmail.modify</code> to read message metadata and headers during the scan, and to archive or trash emails only when you explicitly request it.</p>
           <p><span class="font-medium text-gray-700 dark:text-zinc-200">What TrimBox stores:</span> Nothing. No email content, attachments, or personal data are stored on TrimBox servers. All processing happens in memory during the scan and is discarded when you close the tab.</p>
           <p>
             See our
@@ -80,83 +91,94 @@
       <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-6 shadow-sm dark:shadow-none">
         <div class="flex items-center justify-between mb-6">
           <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-zinc-400">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-500">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.9 2.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" />
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-500" aria-hidden="true">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
             </svg>
             Signed in as <span class="font-medium text-gray-700 dark:text-zinc-200">{{ userEmail }}</span>
           </div>
-          <button class="text-sm text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300 transition-colors" @click="signOut">Sign out</button>
+          <button class="inline-flex items-center gap-1.5 text-sm text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300 transition-colors" @click="signOut">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Sign out
+          </button>
         </div>
         <div class="mb-5 rounded-xl bg-gray-50 dark:bg-zinc-950 border border-gray-200 dark:border-zinc-800 px-4 py-3 space-y-4">
-          <div>
-            <p class="text-sm font-medium text-gray-600 dark:text-zinc-300 mb-2">Mailbox scope</p>
-            <div class="flex flex-wrap gap-x-5 gap-y-2 mb-3">
-              <label class="flex items-center gap-2 cursor-pointer select-none text-sm text-gray-600 dark:text-zinc-300">
-                <input v-model="scanOptions.mailboxMode" type="radio" value="inbox" class="w-4 h-4 accent-orange-500" />
-                Inbox only
-              </label>
-              <label class="flex items-center gap-2 cursor-pointer select-none text-sm text-gray-600 dark:text-zinc-300">
-                <input v-model="scanOptions.mailboxMode" type="radio" value="inbox-and-archived" class="w-4 h-4 accent-orange-500" />
-                Inbox + archived
-              </label>
+          <!-- Also scan + min count -->
+          <div class="flex items-start justify-between gap-6">
+            <div>
+              <p class="text-sm font-medium text-gray-600 dark:text-zinc-300 mb-2">Also scan</p>
+              <div class="flex flex-wrap gap-x-5 gap-y-2">
+                <label class="flex items-center gap-2 cursor-pointer select-none text-sm text-gray-600 dark:text-zinc-300">
+                  <input v-model="scanOptions.includeArchived" type="checkbox" class="w-4 h-4 accent-orange-500" />
+                  Archived
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer select-none text-sm text-gray-600 dark:text-zinc-300">
+                  <input v-model="scanOptions.includeSpam" type="checkbox" class="w-4 h-4 accent-orange-500" />
+                  Spam
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer select-none text-sm text-gray-600 dark:text-zinc-300">
+                  <input v-model="scanOptions.includeTrash" type="checkbox" class="w-4 h-4 accent-orange-500" />
+                  Trash
+                </label>
+              </div>
             </div>
-            <div class="flex flex-wrap gap-x-5 gap-y-2">
-              <label class="flex items-center gap-2 cursor-pointer select-none text-sm text-gray-600 dark:text-zinc-300">
-                <input v-model="scanOptions.includeSpam" type="checkbox" class="w-4 h-4 accent-orange-500" />
-                Include spam
-              </label>
-              <label class="flex items-center gap-2 cursor-pointer select-none text-sm text-gray-600 dark:text-zinc-300">
-                <input v-model="scanOptions.includeTrash" type="checkbox" class="w-4 h-4 accent-orange-500" />
-                Include trash
-              </label>
+            <div class="shrink-0">
+              <p class="text-sm font-medium text-gray-600 dark:text-zinc-300 mb-1.5">Min email count</p>
+              <input v-model.number="scanOptions.minCount" type="number" min="1" max="9999" class="w-24 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-zinc-300 focus:outline-none focus:border-orange-500 text-center" />
             </div>
           </div>
 
-          <div class="grid gap-4 sm:grid-cols-2">
-            <label class="block text-sm text-gray-600 dark:text-zinc-300">
-              <span class="block font-medium mb-1.5">Mailbox filter</span>
-              <select v-model="scanOptions.promotionsOnly" class="w-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-zinc-300 focus:outline-none focus:border-orange-500">
-                <option :value="false">All mail</option>
-                <option :value="true">Promotions/newsletters only</option>
-              </select>
-            </label>
+          <!-- Date range -->
+          <div>
+            <p class="text-sm font-medium text-gray-600 dark:text-zinc-300 mb-1.5">Date range</p>
+            <div class="flex rounded-lg overflow-hidden border border-gray-200 dark:border-zinc-700 text-sm">
+              <button type="button" class="flex-1 px-3 py-2 transition-colors whitespace-nowrap" :class="scanOptions.dateRange === 'all' ? 'bg-orange-500/10 text-orange-500 dark:text-orange-400 font-medium' : 'bg-white dark:bg-zinc-900 text-gray-600 dark:text-zinc-300 hover:bg-gray-50 dark:hover:bg-zinc-800'" @click="scanOptions.dateRange = 'all'">All time</button>
+              <button type="button" class="flex-1 px-3 py-2 transition-colors border-l border-gray-200 dark:border-zinc-700 whitespace-nowrap" :class="scanOptions.dateRange === '1y' ? 'bg-orange-500/10 text-orange-500 dark:text-orange-400 font-medium' : 'bg-white dark:bg-zinc-900 text-gray-600 dark:text-zinc-300 hover:bg-gray-50 dark:hover:bg-zinc-800'" @click="scanOptions.dateRange = '1y'">Last year</button>
+              <button type="button" class="flex-1 px-3 py-2 transition-colors border-l border-gray-200 dark:border-zinc-700 whitespace-nowrap" :class="scanOptions.dateRange === '3m' ? 'bg-orange-500/10 text-orange-500 dark:text-orange-400 font-medium' : 'bg-white dark:bg-zinc-900 text-gray-600 dark:text-zinc-300 hover:bg-gray-50 dark:hover:bg-zinc-800'" @click="scanOptions.dateRange = '3m'">Last 3 months</button>
+            </div>
+          </div>
 
-            <label class="block text-sm text-gray-600 dark:text-zinc-300">
-              <span class="block font-medium mb-1.5">Minimum email count</span>
-              <input v-model.number="scanOptions.minCount" type="number" min="1" max="9999" class="w-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-zinc-300 focus:outline-none focus:border-orange-500" />
+          <!-- Narrow filters -->
+          <div class="flex flex-wrap gap-x-5 gap-y-2">
+            <label class="flex items-center gap-2 cursor-pointer select-none text-sm text-gray-600 dark:text-zinc-300">
+              <input v-model="scanOptions.promotionsOnly" type="checkbox" class="w-4 h-4 accent-orange-500" />
+              Promotions tab only
             </label>
+            <label class="flex items-center gap-2 cursor-pointer select-none text-sm text-gray-600 dark:text-zinc-300">
+              <input v-model="scanOptions.unreadOnly" type="checkbox" class="w-4 h-4 accent-orange-500" />
+              Unread only
+            </label>
+          </div>
 
-            <label class="block text-sm text-gray-600 dark:text-zinc-300">
-              <span class="block font-medium mb-1.5">Group results by</span>
-              <select v-model="scanOptions.groupBy" class="w-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-zinc-300 focus:outline-none focus:border-orange-500">
-                <option value="domain">Sender domain</option>
-                <option value="exact">Exact sender address</option>
-              </select>
-            </label>
+          <div class="border-t border-gray-200 dark:border-zinc-800 -mx-4" />
 
-            <label class="block text-sm text-gray-600 dark:text-zinc-300">
-              <span class="block font-medium mb-1.5">Sort results by</span>
-              <select v-model="scanOptions.sortBy" class="w-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-zinc-300 focus:outline-none focus:border-orange-500">
-                <option value="count">Most emails</option>
-                <option value="newest">Newest activity</option>
-              </select>
-            </label>
-
-            <label class="block text-sm text-gray-600 dark:text-zinc-300">
-              <span class="block font-medium mb-1.5">Unsubscribe links</span>
-              <select v-model="scanOptions.linkMode" class="w-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-zinc-300 focus:outline-none focus:border-orange-500">
-                <option value="primary">Primary link only</option>
-                <option value="all">All fallback links</option>
-              </select>
-            </label>
-
-            <label class="block text-sm text-gray-600 dark:text-zinc-300">
-              <span class="block font-medium mb-1.5">CSV export format</span>
-              <select v-model="scanOptions.exportFormat" class="w-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-zinc-300 focus:outline-none focus:border-orange-500">
-                <option value="sender">One row per sender</option>
-                <option value="link">One row per unsubscribe link</option>
-              </select>
-            </label>
+          <!-- Binary toggles -->
+          <div class="grid gap-3 sm:grid-cols-3">
+            <div>
+              <p class="text-sm font-medium text-gray-600 dark:text-zinc-300 mb-1.5">Group results by</p>
+              <div class="flex rounded-lg overflow-hidden border border-gray-200 dark:border-zinc-700 text-sm">
+                <button type="button" class="flex-1 px-3 py-2 transition-colors whitespace-nowrap" :class="scanOptions.groupBy === 'domain' ? 'bg-orange-500/10 text-orange-500 dark:text-orange-400 font-medium' : 'bg-white dark:bg-zinc-900 text-gray-600 dark:text-zinc-300 hover:bg-gray-50 dark:hover:bg-zinc-800'" @click="scanOptions.groupBy = 'domain'">Domain</button>
+                <button type="button" class="flex-1 px-3 py-2 transition-colors border-l border-gray-200 dark:border-zinc-700 whitespace-nowrap" :class="scanOptions.groupBy === 'exact' ? 'bg-orange-500/10 text-orange-500 dark:text-orange-400 font-medium' : 'bg-white dark:bg-zinc-900 text-gray-600 dark:text-zinc-300 hover:bg-gray-50 dark:hover:bg-zinc-800'" @click="scanOptions.groupBy = 'exact'">Exact</button>
+              </div>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-600 dark:text-zinc-300 mb-1.5">Unsubscribe links</p>
+              <div class="flex rounded-lg overflow-hidden border border-gray-200 dark:border-zinc-700 text-sm">
+                <button type="button" class="flex-1 px-3 py-2 transition-colors whitespace-nowrap" :class="scanOptions.linkMode === 'primary' ? 'bg-orange-500/10 text-orange-500 dark:text-orange-400 font-medium' : 'bg-white dark:bg-zinc-900 text-gray-600 dark:text-zinc-300 hover:bg-gray-50 dark:hover:bg-zinc-800'" @click="scanOptions.linkMode = 'primary'">Primary only</button>
+                <button type="button" class="flex-1 px-3 py-2 transition-colors border-l border-gray-200 dark:border-zinc-700 whitespace-nowrap" :class="scanOptions.linkMode === 'all' ? 'bg-orange-500/10 text-orange-500 dark:text-orange-400 font-medium' : 'bg-white dark:bg-zinc-900 text-gray-600 dark:text-zinc-300 hover:bg-gray-50 dark:hover:bg-zinc-800'" @click="scanOptions.linkMode = 'all'">All</button>
+              </div>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-gray-600 dark:text-zinc-300 mb-1.5">CSV export format</p>
+              <div class="flex rounded-lg overflow-hidden border border-gray-200 dark:border-zinc-700 text-sm">
+                <button type="button" class="flex-1 px-3 py-2 transition-colors whitespace-nowrap" :class="scanOptions.exportFormat === 'sender' ? 'bg-orange-500/10 text-orange-500 dark:text-orange-400 font-medium' : 'bg-white dark:bg-zinc-900 text-gray-600 dark:text-zinc-300 hover:bg-gray-50 dark:hover:bg-zinc-800'" @click="scanOptions.exportFormat = 'sender'">Per sender</button>
+                <button type="button" class="flex-1 px-3 py-2 transition-colors border-l border-gray-200 dark:border-zinc-700 whitespace-nowrap" :class="scanOptions.exportFormat === 'link' ? 'bg-orange-500/10 text-orange-500 dark:text-orange-400 font-medium' : 'bg-white dark:bg-zinc-900 text-gray-600 dark:text-zinc-300 hover:bg-gray-50 dark:hover:bg-zinc-800'" @click="scanOptions.exportFormat = 'link'">Per link</button>
+              </div>
+            </div>
           </div>
         </div>
         <button class="w-full bg-orange-500 hover:bg-orange-400 text-white font-semibold rounded-lg py-3 text-sm transition-colors" @click="startScan">Scan Inbox</button>
@@ -176,12 +198,12 @@
     <div v-else-if="status === 'done'">
       <!-- Stats summary -->
       <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-6 mb-4 shadow-sm dark:shadow-none">
-        <div class="flex items-start justify-between gap-4">
+        <div class="flex items-start justify-between gap-4 mb-4">
           <div>
             <p class="text-3xl font-bold text-orange-500">{{ formatNumber(results.length) }}</p>
-            <p class="text-gray-500 dark:text-zinc-400 text-sm mt-0.5">mailing lists found in {{ totalScanned.toLocaleString() }} messages</p>
+            <p class="text-gray-500 dark:text-zinc-400 text-sm mt-0.5">mailing lists · {{ formatNumber(mailingListMessageCount) }} of {{ formatNumber(totalScanned) }} messages</p>
           </div>
-          <button class="inline-flex items-center gap-1.5 bg-orange-500 hover:bg-orange-400 text-white font-semibold rounded-lg px-4 py-2.5 text-sm transition-colors flex-shrink-0" @click="downloadCsv">
+          <button class="inline-flex items-center gap-1.5 bg-orange-500 hover:bg-orange-400 text-white font-semibold rounded-lg px-4 py-2.5 text-sm transition-colors shrink-0" @click="downloadCsv">
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
               <polyline points="7 10 12 15 17 10" />
@@ -190,24 +212,75 @@
             Download CSV
           </button>
         </div>
+        <div class="flex items-center justify-between">
+          <button class="text-sm text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300 transition-colors" @click="reset">← Scan again</button>
+          <button class="inline-flex items-center gap-1.5 text-sm text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300 transition-colors" @click="signOut">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+            Sign out
+          </button>
+        </div>
       </div>
 
-      <!-- Actions -->
-      <div class="flex items-center justify-between mb-4">
-        <button class="text-sm text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300 transition-colors" @click="reset">← Scan again</button>
-        <button class="text-sm text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300 transition-colors" @click="signOut">Sign out &amp; clear</button>
+      <!-- Bulk action bar -->
+      <div class="flex items-center gap-2 mb-4 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-2.5 shadow-sm dark:shadow-none">
+        <span class="text-sm font-medium text-gray-700 dark:text-zinc-200 flex-1">{{ selectedKeys.size }} selected</span>
+        <p v-if="actionError" class="text-xs text-red-500 mr-2">{{ actionError }}</p>
+        <button class="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 dark:text-zinc-300 hover:text-gray-900 dark:hover:text-zinc-100 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-700 rounded-lg px-3 py-1.5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed" :disabled="selectedKeys.size === 0 || actionStatus !== 'idle'" @click="archiveSelected">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="21 8 21 21 3 21 3 8" />
+            <rect x="1" y="3" width="22" height="5" />
+            <line x1="10" y1="12" x2="14" y2="12" />
+          </svg>
+          {{ actionStatus === 'archiving' ? 'Archiving…' : 'Archive' }}
+        </button>
+        <button class="inline-flex items-center gap-1.5 text-sm font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 bg-red-50 dark:bg-red-950/60 hover:bg-red-100 dark:hover:bg-red-900/60 rounded-lg px-3 py-1.5 transition-colors disabled:opacity-40 disabled:cursor-not-allowed" :disabled="selectedKeys.size === 0 || actionStatus !== 'idle'" @click="trashSelected">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14H6L5 6" />
+            <path d="M10 11v6" />
+            <path d="M14 11v6" />
+            <path d="M9 6V4h6v2" />
+          </svg>
+          {{ actionStatus === 'trashing' ? 'Moving to trash…' : 'Move to trash' }}
+        </button>
       </div>
 
       <!-- Sender list -->
       <div v-if="results.length > 0" class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl overflow-hidden shadow-sm dark:shadow-none mb-4">
         <!-- List header -->
-        <div class="grid grid-cols-[1fr_auto_minmax(8rem,18rem)] gap-4 px-5 py-3 border-b border-gray-100 dark:border-zinc-800 text-xs font-semibold text-gray-400 dark:text-zinc-500 uppercase tracking-wider">
-          <span>Sender</span>
-          <span class="text-right">Emails</span>
-          <span class="text-right">Unsubscribe links</span>
+        <div class="grid grid-cols-[2rem_1fr_auto_minmax(8rem,18rem)] gap-4 px-5 py-3 border-b border-gray-100 dark:border-zinc-800 text-xs font-semibold text-gray-400 dark:text-zinc-500 items-center">
+          <input type="checkbox" :checked="allSelected" :indeterminate="!allSelected && selectedKeys.size > 0" class="w-4 h-4 accent-orange-500 cursor-pointer" @change="toggleAll" />
+          <button class="flex items-center gap-1 hover:text-gray-600 dark:hover:text-zinc-300 transition-colors text-left" @click="toggleSort('name')">
+            Sender
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" :class="sortColumn === 'name' ? 'text-orange-500' : 'opacity-30'" aria-hidden="true">
+              <polyline v-if="sortColumn === 'name' && sortDir === 'asc'" points="18 15 12 9 6 15" />
+              <polyline v-else-if="sortColumn === 'name' && sortDir === 'desc'" points="6 9 12 15 18 9" />
+              <template v-else>
+                <polyline points="18 15 12 9 6 15" class="opacity-50" />
+                <polyline points="6 17 12 23 18 17" class="opacity-50" />
+              </template>
+            </svg>
+          </button>
+          <button class="flex items-center justify-end gap-1 hover:text-gray-600 dark:hover:text-zinc-300 transition-colors" @click="toggleSort('count')">
+            Emails
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" :class="sortColumn === 'count' ? 'text-orange-500' : 'opacity-30'" aria-hidden="true">
+              <polyline v-if="sortColumn === 'count' && sortDir === 'asc'" points="18 15 12 9 6 15" />
+              <polyline v-else-if="sortColumn === 'count' && sortDir === 'desc'" points="6 9 12 15 18 9" />
+              <template v-else>
+                <polyline points="18 15 12 9 6 15" class="opacity-50" />
+                <polyline points="6 17 12 23 18 17" class="opacity-50" />
+              </template>
+            </svg>
+          </button>
+          <span class="text-right">Unsubscribe Links</span>
         </div>
         <!-- Rows -->
-        <div v-for="(sender, i) in results" :key="sender.email" :class="i > 0 ? 'border-t border-gray-100 dark:border-zinc-800' : ''" class="grid grid-cols-[1fr_auto_minmax(8rem,18rem)] gap-4 px-5 py-3.5 items-center hover:bg-gray-50 dark:hover:bg-zinc-800/50 transition-colors">
+        <div v-for="(sender, i) in sortedResults" :key="sender.email" :class="[i > 0 ? 'border-t border-gray-100 dark:border-zinc-800' : '', selectedKeys.has(sender.email) ? 'bg-orange-50/50 dark:bg-orange-950/20' : 'hover:bg-gray-50 dark:hover:bg-zinc-800/50']" class="grid grid-cols-[2rem_1fr_auto_minmax(8rem,18rem)] gap-4 px-5 py-3.5 items-center transition-colors">
+          <input type="checkbox" :checked="selectedKeys.has(sender.email)" class="w-4 h-4 accent-orange-500 cursor-pointer mt-0.5" @change="toggleSender(sender.email)" />
           <div class="min-w-0">
             <p class="font-medium text-sm truncate">{{ sender.name }}</p>
             <p class="text-xs text-gray-400 dark:text-zinc-500 truncate">{{ sender.email }}</p>
@@ -244,6 +317,7 @@ interface SenderInfo {
   count: number
   latestSeen: number
   unsubscribeUrls: string[]
+  messageIds: string[]
 }
 
 interface AuthStatus {
@@ -252,18 +326,20 @@ interface AuthStatus {
 }
 
 interface ScanOptions {
-  mailboxMode: 'inbox' | 'inbox-and-archived'
+  includeArchived: boolean
   includeSpam: boolean
   includeTrash: boolean
   promotionsOnly: boolean
+  unreadOnly: boolean
+  dateRange: 'all' | '1y' | '3m'
   minCount: number
   groupBy: 'domain' | 'exact'
   linkMode: 'primary' | 'all'
-  sortBy: 'count' | 'newest'
   exportFormat: 'sender' | 'link'
 }
 
 type Status = 'idle' | 'scanning' | 'done' | 'error'
+type ActionStatus = 'idle' | 'archiving' | 'trashing'
 const AUTO_SCROLL_THRESHOLD_PX = 24
 
 const { data: initialAuth } = await useFetch<AuthStatus>('/api/auth/me', {
@@ -276,14 +352,15 @@ const status = ref<Status>('idle')
 const isSignedIn = ref(initialAuth.value?.signedIn ?? false)
 const userEmail = ref<string | null>(initialAuth.value?.email ?? null)
 const scanOptions = ref<ScanOptions>({
-  mailboxMode: 'inbox-and-archived',
+  includeArchived: false,
   includeSpam: false,
   includeTrash: false,
   promotionsOnly: false,
+  unreadOnly: false,
+  dateRange: 'all',
   minCount: 1,
   groupBy: 'domain',
   linkMode: 'primary',
-  sortBy: 'count',
   exportFormat: 'sender'
 })
 const progress = ref<string[]>([])
@@ -291,6 +368,21 @@ const progressContainer = ref<HTMLElement | null>(null)
 const results = ref<SenderInfo[]>([])
 const totalScanned = ref(0)
 const errorMessage = ref('')
+const selectedKeys = ref(new Set<string>())
+const actionStatus = ref<ActionStatus>('idle')
+const actionError = ref('')
+const sortColumn = ref<'name' | 'count'>('count')
+const sortDir = ref<'asc' | 'desc'>('desc')
+const allSelected = computed(() => results.value.length > 0 && selectedKeys.value.size === results.value.length)
+const mailingListMessageCount = computed(() => results.value.reduce((sum, s) => sum + s.count, 0))
+const sortedResults = computed(() => {
+  return [...results.value].sort((a, b) => {
+    const dir = sortDir.value === 'asc' ? 1 : -1
+    if (sortColumn.value === 'name') return a.name.localeCompare(b.name) * dir
+    const diff = a.count - b.count
+    return (diff !== 0 ? diff : a.name.localeCompare(b.name)) * dir
+  })
+})
 
 const route = useRoute()
 const authError = computed(() => !!route.query.error)
@@ -335,6 +427,7 @@ const signOut = async () => {
   status.value = 'idle'
   results.value = []
   progress.value = []
+  selectedKeys.value.clear()
 }
 
 const reset = () => {
@@ -342,6 +435,68 @@ const reset = () => {
   results.value = []
   progress.value = []
   errorMessage.value = ''
+  selectedKeys.value.clear()
+  sortColumn.value = 'count'
+  sortDir.value = 'desc'
+}
+
+const toggleSort = (col: 'name' | 'count') => {
+  if (sortColumn.value === col) {
+    sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc'
+  } else {
+    sortColumn.value = col
+    sortDir.value = col === 'count' ? 'desc' : 'asc'
+  }
+}
+
+const toggleSender = (email: string) => {
+  if (selectedKeys.value.has(email)) {
+    selectedKeys.value.delete(email)
+  } else {
+    selectedKeys.value.add(email)
+  }
+}
+
+const toggleAll = () => {
+  if (allSelected.value) {
+    selectedKeys.value.clear()
+  } else {
+    for (const sender of results.value) {
+      selectedKeys.value.add(sender.email)
+    }
+  }
+}
+
+const archiveSelected = async () => {
+  const messageIds = results.value.filter((s) => selectedKeys.value.has(s.email)).flatMap((s) => s.messageIds)
+  if (messageIds.length === 0) return
+  actionStatus.value = 'archiving'
+  actionError.value = ''
+  try {
+    await $fetch('/api/messages/archive', { method: 'POST', body: { messageIds }, credentials: 'include' })
+    results.value = results.value.filter((s) => !selectedKeys.value.has(s.email))
+    selectedKeys.value.clear()
+  } catch {
+    actionError.value = 'Archive failed. Please try again.'
+  } finally {
+    actionStatus.value = 'idle'
+  }
+}
+
+const trashSelected = async () => {
+  const messageIds = results.value.filter((s) => selectedKeys.value.has(s.email)).flatMap((s) => s.messageIds)
+  if (messageIds.length === 0) return
+  actionStatus.value = 'trashing'
+  actionError.value = ''
+  try {
+    await $fetch('/api/messages/trash', { method: 'POST', body: { messageIds }, credentials: 'include' })
+    results.value = results.value.filter((s) => !selectedKeys.value.has(s.email))
+    selectedKeys.value.clear()
+  } catch {
+    actionError.value = 'Move to trash failed. Please try again.'
+  } finally {
+    actionStatus.value = 'idle'
+  }
 }
 
 watch(
@@ -370,13 +525,14 @@ const startScan = () => {
   type ScanEvent = { type: 'progress'; message: string } | { type: 'complete'; results: SenderInfo[]; totalScanned: number } | { type: 'error'; message: string }
 
   const params = new URLSearchParams({
-    includeArchived: String(scanOptions.value.mailboxMode === 'inbox-and-archived'),
+    includeArchived: String(scanOptions.value.includeArchived),
     includeSpam: String(scanOptions.value.includeSpam),
     includeTrash: String(scanOptions.value.includeTrash),
     promotionsOnly: String(scanOptions.value.promotionsOnly),
+    unreadOnly: String(scanOptions.value.unreadOnly),
+    dateRange: scanOptions.value.dateRange,
     minCount: String(scanOptions.value.minCount),
-    groupBy: scanOptions.value.groupBy,
-    sortBy: scanOptions.value.sortBy
+    groupBy: scanOptions.value.groupBy
   })
 
   eventSource?.close()

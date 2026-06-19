@@ -6,16 +6,16 @@
 
     <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-8 shadow-sm dark:shadow-none prose prose-gray dark:prose-invert max-w-none">
       <h1 class="text-2xl font-bold tracking-tight mb-1">Terms of Service</h1>
-      <p class="text-sm text-gray-400 dark:text-zinc-500 mb-8">Last updated: June 3, 2025</p>
+      <p class="text-sm text-gray-400 dark:text-zinc-500 mb-8">Last updated: June 19, 2025</p>
 
       <section class="mb-8">
         <h2 class="text-lg font-semibold mb-3">Use of the service</h2>
-        <p class="text-gray-600 dark:text-zinc-400 text-sm leading-relaxed">TrimBox is a free tool that scans your Gmail inbox to identify mailing list subscriptions. By using TrimBox you agree to use it only for lawful purposes and in accordance with these terms. You must have a valid Google account and grant the necessary Gmail permissions to use the service.</p>
+        <p class="text-gray-600 dark:text-zinc-400 text-sm leading-relaxed">TrimBox is a free tool that scans your Gmail inbox to identify mailing list subscriptions and lets you archive or trash emails from selected senders in bulk. By using TrimBox you agree to use it only for lawful purposes and in accordance with these terms. You must have a valid Google account and grant the necessary Gmail permissions to use the service.</p>
       </section>
 
       <section class="mb-8">
         <h2 class="text-lg font-semibold mb-3">Gmail access</h2>
-        <p class="text-gray-600 dark:text-zinc-400 text-sm leading-relaxed">TrimBox requests read-only access to your Gmail account. We do not modify, delete, or send emails on your behalf. You can revoke access at any time through <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener" class="text-orange-600 dark:text-orange-400 hover:underline">Google Account Permissions</a>.</p>
+        <p class="text-gray-600 dark:text-zinc-400 text-sm leading-relaxed">TrimBox requests access to your Gmail account to read message headers during scanning and to archive or move emails to trash at your explicit request. TrimBox does not send emails on your behalf, access email body content, or take any action on your mailbox without your direct instruction. You are responsible for reviewing which senders you select before performing bulk actions. Archived and trashed emails can be recovered from Gmail but TrimBox does not provide an undo function. You can revoke access at any time through <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener" class="text-orange-600 dark:text-orange-400 hover:underline">Google Account Permissions</a>.</p>
       </section>
 
       <section class="mb-8">
