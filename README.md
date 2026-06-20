@@ -1,12 +1,13 @@
 # TrimBox
 
-Scan your Gmail inbox and find every mailing list you're subscribed to.
+Scan your Gmail inbox, find every mailing list you're subscribed to, and clean them up without leaving the app.
 
-TrimBox connects to Gmail with read-only metadata access, scans up to 10,000 messages for `List-Unsubscribe` headers, and surfaces every bulk sender, grouped, sorted, and with one-click unsubscribe links. No email content is ever read or stored.
+TrimBox connects to Gmail, scans up to 10,000 messages for `List-Unsubscribe` headers, and surfaces every bulk sender, grouped and sorted, with one-click unsubscribe links. Select senders to archive or trash all their messages in bulk. No email content is ever read or stored.
 
 ## Features
 
-- **Gmail metadata scan** — reads only `From` and `List-Unsubscribe` headers; email body content never leaves Google's servers
+- **Gmail scan** — reads only `From` and `List-Unsubscribe` headers; email body content never leaves Google's servers
+- **Bulk archive / trash** — select senders and act on all their messages at once
 - **Real-time progress** — live SSE feed as messages are processed
 - **Flexible grouping** — group results by sender domain or exact address
 - **Unsubscribe links** — extracted directly from email headers, deduplicated, and ranked by recency
@@ -18,7 +19,7 @@ TrimBox connects to Gmail with read-only metadata access, scans up to 10,000 mes
 
 - [Nuxt 4](https://nuxt.com) + Vue 3
 - [Tailwind CSS](https://tailwindcss.com)
-- [Google APIs](https://www.npmjs.com/package/googleapis) — `gmail.metadata` scope
+- [Google APIs](https://www.npmjs.com/package/googleapis) — `gmail.modify` scope
 - Deployed on [Vercel](https://vercel.com)
 
 ## Development
@@ -55,7 +56,7 @@ See `.env.example` for the full list.
 
 ## Privacy
 
-TrimBox requests `https://www.googleapis.com/auth/gmail.metadata` — the narrowest Gmail scope available. It grants read access to message metadata and headers only. No email content, attachments, or personal data are stored on TrimBox servers. All scan results are processed in memory and discarded when you close the tab.
+TrimBox requests `https://www.googleapis.com/auth/gmail.modify` to read message metadata and headers during the scan, and to archive or trash emails only when you explicitly request it. No email content, attachments, or personal data are stored on TrimBox servers. All scan results are processed in memory and discarded when you close the tab.
 
 ## License
 
