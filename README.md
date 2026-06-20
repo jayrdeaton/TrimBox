@@ -6,20 +6,20 @@ TrimBox connects to Gmail, scans up to 10,000 messages for `List-Unsubscribe` he
 
 ## Features
 
-- **Gmail scan** — reads only `From` and `List-Unsubscribe` headers; email body content never leaves Google's servers
-- **Bulk archive / trash** — select senders and act on all their messages at once
-- **Real-time progress** — live SSE feed as messages are processed
-- **Flexible grouping** — group results by sender domain or exact address
-- **Unsubscribe links** — extracted directly from email headers, deduplicated, and ranked by recency
-- **Scan options** — inbox only or inbox + archived, optional spam/trash, promotions filter, minimum email count threshold
-- **CSV export** — download results as one row per sender or one row per unsubscribe link
+- **Gmail scan**: reads only `From` and `List-Unsubscribe` headers; email body content never leaves Google's servers
+- **Bulk archive / trash**: select senders and act on all their messages at once
+- **Real-time progress**: live SSE feed as messages are processed
+- **Flexible grouping**: group results by sender domain or exact address
+- **Unsubscribe links**: extracted directly from email headers, deduplicated, and ranked by recency
+- **Scan options**: inbox only or inbox + archived, optional spam/trash, promotions filter, minimum email count threshold
+- **CSV export**: download results as one row per sender or one row per unsubscribe link
 - **Dark / light / system mode**
 
 ## Tech Stack
 
 - [Nuxt 4](https://nuxt.com) + Vue 3
 - [Tailwind CSS](https://tailwindcss.com)
-- [Google APIs](https://www.npmjs.com/package/googleapis) — `gmail.modify` scope
+- [Google APIs](https://www.npmjs.com/package/googleapis), `gmail.modify` scope
 - Deployed on [Vercel](https://vercel.com)
 
 ## Development
@@ -60,4 +60,4 @@ TrimBox requests `https://www.googleapis.com/auth/gmail.modify` to read message 
 
 ## License
 
-MIT — [Jay Deaton](https://github.com/jayrdeaton)
+MIT, [Jay Deaton](https://github.com/jayrdeaton)
