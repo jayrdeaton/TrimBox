@@ -14,6 +14,7 @@ interface SenderAggregate {
   email: string
   count: number
   latestSeen: number
+  hasUnsubscribeHeader: boolean
   unsubscribeStats: Map<string, { count: number; lastSeen: number }>
   messageIds: string[]
 }
@@ -23,7 +24,7 @@ type GroupByMode = 'domain' | 'exact'
 // type SortByMode = 'count' | 'newest'
 
 const MAX_MESSAGES = 10000
-const BATCH_SIZE = 50
+const BATCH_SIZE = 100
 
 const formatNumber = (value: number): string => value.toLocaleString()
 
@@ -145,20 +146,28 @@ const sortUnsubscribeUrls = (unsubscribeStats: Map<string, { count: number; last
     .map((entry) => entry.representative)
 }
 
-const buildScopeLabel = (scope: MailboxScope, includeArchived: boolean): string => {
+const buildScopeLabel = (scope: MailboxScope, includeInbox: boolean, includeArchived: boolean): string => {
   if (scope === 'spam') return 'Spam'
   if (scope === 'trash') return 'Trash'
-  return includeArchived ? 'Inbox + archived' : 'Inbox only'
+  if (includeInbox && includeArchived) return 'Inbox + archived'
+  if (includeInbox) return 'Inbox'
+  return 'Archived'
 }
 
 export default defineEventHandler(async (event) => {
   const token = getCookie(event, 'access_token')
   const query = getQuery(event)
-  const includeArchived = parseBooleanQuery(query.includeArchived as string | string[] | undefined, true)
+  const includeInbox = parseBooleanQuery(query.includeInbox as string | string[] | undefined, true)
+  const includeArchived = parseBooleanQuery(query.includeArchived as string | string[] | undefined, false)
   const includeSpam = parseBooleanQuery(query.includeSpam as string | string[] | undefined, false)
   const includeTrash = parseBooleanQuery(query.includeTrash as string | string[] | undefined, false)
-  const promotionsOnly = parseBooleanQuery(query.promotionsOnly as string | string[] | undefined, false)
-  const unreadOnly = parseBooleanQuery(query.unreadOnly as string | string[] | undefined, false)
+  const VALID_CATEGORIES = new Set(['primary', 'promotions', 'social', 'updates', 'forums'])
+  const rawCategories = Array.isArray(query.categories) ? query.categories[0] : (query.categories as string | undefined)
+  const categories = (rawCategories ?? '')
+    .split(',')
+    .map((c: string) => c.trim())
+    .filter((c: string) => VALID_CATEGORIES.has(c))
+  const readFilter = parseEnumQuery(query.readFilter as string | string[] | undefined, ['all', 'unread', 'read'] as const, 'all')
   const dateRange = parseEnumQuery(query.dateRange as string | string[] | undefined, ['all', '1y', '3m'] as const, 'all')
   const minCount = parseNumberQuery(query.minCount as string | string[] | undefined, 1, 1)
   const groupBy = parseEnumQuery(query.groupBy as string | string[] | undefined, ['domain', 'exact'] as const, 'domain')
@@ -185,8 +194,13 @@ export default defineEventHandler(async (event) => {
 
     const gmail = google.gmail({ version: 'v1', auth })
     const queryParts: string[] = []
-    if (promotionsOnly) queryParts.push('category:promotions')
-    if (unreadOnly) queryParts.push('is:unread')
+    if (categories.length === 1) {
+      queryParts.push(`category:${categories[0]}`)
+    } else if (categories.length > 1) {
+      queryParts.push(`{${categories.map((c: string) => `category:${c}`).join(' ')}}`)
+    }
+    if (readFilter === 'unread') queryParts.push('is:unread')
+    else if (readFilter === 'read') queryParts.push('is:read')
     if (dateRange !== 'all') {
       const cutoff = new Date()
       if (dateRange === '1y') cutoff.setFullYear(cutoff.getFullYear() - 1)
@@ -219,13 +233,24 @@ export default defineEventHandler(async (event) => {
         }
 
         pageToken = response.data.nextPageToken ?? undefined
-        send({ type: 'progress', message: `Found ${formatNumber(messageIds.size)} messages (${buildScopeLabel(scope, includeArchived)})...` })
+        send({ type: 'progress', message: `Found ${formatNumber(messageIds.size)} messages (${buildScopeLabel(scope, includeInbox, includeArchived)})...`, found: messageIds.size })
 
         if (!pageToken) break
       }
     }
 
-    await collectMessageIds('primary', includeArchived ? { q: queryFilter } : { labelIds: ['INBOX'], q: queryFilter })
+    if (includeInbox || includeArchived) {
+      let primaryParams: { labelIds?: string[]; q?: string }
+      if (includeInbox && includeArchived) {
+        primaryParams = { q: queryFilter }
+      } else if (includeInbox) {
+        primaryParams = { labelIds: ['INBOX'], q: queryFilter }
+      } else {
+        const archivedQ = queryFilter ? `${queryFilter} -in:inbox` : '-in:inbox'
+        primaryParams = { q: archivedQ }
+      }
+      await collectMessageIds('primary', primaryParams)
+    }
     if (includeSpam && messageIds.size < MAX_MESSAGES) {
       await collectMessageIds('spam', { labelIds: ['SPAM'], q: queryFilter })
     }
@@ -263,22 +288,25 @@ export default defineEventHandler(async (event) => {
         const unsubHeader = headers.find((h) => h.name?.toLowerCase() === 'list-unsubscribe')?.value || ''
         const messageTimestamp = Number(result.value.data.internalDate ?? Date.now())
 
-        if (!unsubHeader) continue
+        if (!fromHeader) continue
 
         const angleMatch = fromHeader.match(/<([^>]+)>/)
         const email = (angleMatch?.[1] ?? fromHeader).trim().toLowerCase()
         const nameMatch = fromHeader.match(/^"?([^"<]+?)"?\s*</)
         const name = nameMatch?.[1]?.trim() || email
 
-        const bracketedUrls = [...unsubHeader.matchAll(/<([^>]+)>/g)].map((m) => m[1]?.trim()).filter(Boolean) as string[]
-        const fallbackUrls =
-          bracketedUrls.length > 0
-            ? []
-            : unsubHeader
-                .split(',')
-                .map((value) => value.trim().replace(/^<|>$/g, ''))
-                .filter(Boolean)
-        const unsubscribeUrls = [...new Set([...bracketedUrls, ...fallbackUrls])]
+        const unsubscribeUrls: string[] = []
+        if (unsubHeader) {
+          const bracketedUrls = [...unsubHeader.matchAll(/<([^>]+)>/g)].map((m) => m[1]?.trim()).filter(Boolean) as string[]
+          const fallbackUrls =
+            bracketedUrls.length > 0
+              ? []
+              : unsubHeader
+                  .split(',')
+                  .map((value) => value.trim().replace(/^<|>$/g, ''))
+                  .filter(Boolean)
+          unsubscribeUrls.push(...new Set([...bracketedUrls, ...fallbackUrls]))
+        }
 
         const senderKey = resolveSenderKey(email, groupBy)
         const existing = senderMap.get(senderKey)
@@ -289,6 +317,7 @@ export default defineEventHandler(async (event) => {
             existing.latestSeen = messageTimestamp
             existing.name = name
           }
+          if (unsubHeader) existing.hasUnsubscribeHeader = true
 
           for (const unsubscribeUrl of unsubscribeUrls) {
             const current = existing.unsubscribeStats.get(unsubscribeUrl)
@@ -310,6 +339,7 @@ export default defineEventHandler(async (event) => {
             email: senderKey,
             count: 1,
             latestSeen: messageTimestamp,
+            hasUnsubscribeHeader: !!unsubHeader,
             unsubscribeStats,
             messageIds: [msgId]
           })
@@ -317,22 +347,11 @@ export default defineEventHandler(async (event) => {
       }
 
       const processed = Math.min(i + BATCH_SIZE, messageIdList.length)
-      if (processed % 500 === 0 || processed === messageIdList.length) {
-        send({ type: 'progress', message: `Processed ${formatNumber(processed)} / ${formatNumber(messageIdList.length)}...` })
-      }
+      send({ type: 'progress', message: `Processed ${formatNumber(processed)} / ${formatNumber(messageIdList.length)}...` })
     }
 
-    const results: SenderInfo[] = Array.from(senderMap.values())
-      .filter((sender) => sender.count >= minCount)
-      .map((sender) => ({
-        name: sender.name,
-        email: sender.email,
-        count: sender.count,
-        latestSeen: sender.latestSeen,
-        unsubscribeUrls: sortUnsubscribeUrls(sender.unsubscribeStats),
-        messageIds: sender.messageIds
-      }))
-      .sort((a, b) => {
+    const sortSenders = (senders: SenderInfo[]) =>
+      senders.sort((a, b) => {
         if (sortBy === 'newest') {
           const newestDiff = b.latestSeen - a.latestSeen
           if (newestDiff !== 0) return newestDiff
@@ -349,7 +368,35 @@ export default defineEventHandler(async (event) => {
         return a.email.localeCompare(b.email)
       })
 
-    send({ type: 'complete', results, totalScanned: messageIdList.length })
+    const allSenders = Array.from(senderMap.values()).filter((sender) => sender.count >= minCount)
+
+    const mailingListResults = sortSenders(
+      allSenders
+        .filter((sender) => sender.hasUnsubscribeHeader)
+        .map((sender) => ({
+          name: sender.name,
+          email: sender.email,
+          count: sender.count,
+          latestSeen: sender.latestSeen,
+          unsubscribeUrls: sortUnsubscribeUrls(sender.unsubscribeStats),
+          messageIds: sender.messageIds
+        }))
+    )
+
+    const frequentSenderResults = sortSenders(
+      allSenders
+        .filter((sender) => !sender.hasUnsubscribeHeader)
+        .map((sender) => ({
+          name: sender.name,
+          email: sender.email,
+          count: sender.count,
+          latestSeen: sender.latestSeen,
+          unsubscribeUrls: [],
+          messageIds: sender.messageIds
+        }))
+    )
+
+    send({ type: 'complete', results: mailingListResults, frequentSenderResults, totalScanned: messageIdList.length })
   } catch (err) {
     send({ type: 'error', message: err instanceof Error ? err.message : 'Scan failed' })
   }

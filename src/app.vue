@@ -2,13 +2,20 @@
   <div>
     <div class="min-h-screen bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-zinc-100 flex flex-col transition-colors duration-200">
       <!-- Header -->
-      <header class="border-b border-gray-200 dark:border-zinc-800 px-6 pb-4 flex-shrink-0" style="padding-top: calc(1rem + env(safe-area-inset-top))">
+      <header class="border-b border-gray-200 dark:border-zinc-800 px-6 pb-4 shrink-0" style="padding-top: calc(1rem + env(safe-area-inset-top))">
         <div class="max-w-3xl mx-auto flex items-center justify-between">
           <NuxtLink to="/" class="flex items-center gap-2">
             <img src="/icon.svg" alt="TrimBox" class="w-6 h-6" />
             <span class="text-base font-semibold tracking-tight">TrimBox</span>
           </NuxtLink>
           <div class="flex items-center gap-3">
+            <button v-if="isSignedIn" aria-label="Sign out" class="p-1.5 rounded-lg text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors" @click="handleSignOut">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+            </button>
             <button :aria-label="colorMode.preference === 'system' ? 'System mode' : colorMode.preference === 'light' ? 'Light mode' : 'Dark mode'" class="p-1.5 rounded-lg text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors" @click="cycleColorMode">
               <svg v-if="colorMode.preference === 'system'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="3" width="20" height="14" rx="2" />
@@ -43,7 +50,7 @@
       <NuxtPage class="flex-1" />
 
       <!-- Footer -->
-      <footer class="border-t border-gray-200 dark:border-zinc-800 py-6 text-center text-sm text-gray-400 dark:text-zinc-500 flex-shrink-0">
+      <footer class="border-t border-gray-200 dark:border-zinc-800 py-6 text-center text-sm text-gray-400 dark:text-zinc-500 shrink-0">
         Powered by
         <a href="https://infinitetoken.com" target="_blank" rel="noopener" class="text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 underline underline-offset-2 ml-1 transition-colors">Infinite Token</a>
         <span class="mx-2">·</span>
@@ -57,6 +64,13 @@
 
 <script setup lang="ts">
 const colorMode = useColorMode()
+const isSignedIn = useState<boolean>('trimbox:isSignedIn', () => false)
+
+const handleSignOut = async () => {
+  await $fetch('/api/auth/signout', { method: 'POST', credentials: 'include' })
+  isSignedIn.value = false
+  await navigateTo('/')
+}
 
 const cycleColorMode = () => {
   const systemIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches

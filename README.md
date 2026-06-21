@@ -1,18 +1,20 @@
 # TrimBox
 
-Scan your Gmail inbox, find every mailing list you're subscribed to, and clean them up without leaving the app.
+Scan your Gmail inbox, find every mailing list and frequent sender, and clean them up without leaving the app.
 
-TrimBox connects to Gmail, scans up to 10,000 messages for `List-Unsubscribe` headers, and surfaces every bulk sender, grouped and sorted, with one-click unsubscribe links. Select senders to archive or trash all their messages in bulk. No email content is ever read or stored.
+TrimBox connects to Gmail, scans up to 10,000 messages, and surfaces every bulk sender in two views: mailing lists (with one-click unsubscribe links) and frequent senders (receipts, notifications, and anything else clogging your inbox). Select senders to archive, trash, or mark as read in bulk. No email content is ever read or stored.
 
 ## Features
 
 - **Gmail scan**: reads only `From` and `List-Unsubscribe` headers; email body content never leaves Google's servers
-- **Bulk archive / trash**: select senders and act on all their messages at once
+- **Mailing lists tab**: surfaces senders with unsubscribe headers, with deduplicated unsubscribe links ranked by recency
+- **Frequent senders tab**: surfaces all other high-volume senders — receipts, notifications, transactional email — grouped and sorted by volume
+- **Bulk actions**: archive, trash, or mark as read across all messages from selected senders at once
 - **Real-time progress**: live SSE feed as messages are processed
 - **Flexible grouping**: group results by sender domain or exact address
-- **Unsubscribe links**: extracted directly from email headers, deduplicated, and ranked by recency
-- **Scan options**: inbox only or inbox + archived, optional spam/trash, promotions filter, minimum email count threshold
+- **Scan options**: configurable mailbox scope (inbox, archived, spam, trash), Gmail tab filter, read status filter, date range, and minimum message count threshold
 - **CSV export**: download results as one row per sender or one row per unsubscribe link
+- **Persistent preferences**: scan options and active tab saved to localStorage
 - **Dark / light / system mode**
 
 ## Tech Stack
