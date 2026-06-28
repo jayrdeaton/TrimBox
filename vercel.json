@@ -4,5 +4,5 @@
   },
   "framework": "nuxtjs",
   "buildCommand": "npm run build",
-  "devCommand": "TMPDIR=/tmp nuxt dev"
+  "devCommand": "nuxt dev"
 }

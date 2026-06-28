@@ -1,8 +1,8 @@
 <template>
-  <main class="flex-1 max-w-3xl mx-auto w-full px-6 py-14">
+  <main class="flex-1 max-w-3xl mx-auto w-full px-6 pt-10 pb-14">
     <!-- Hero -->
     <div class="mb-10 text-center">
-      <h1 class="text-4xl font-bold tracking-tight mb-3">Clean up your inbox, in bulk.</h1>
+      <h1 class="text-4xl font-bold tracking-tight mb-3">Clean up your inbox in bulk</h1>
       <p v-if="status === 'idle'" class="text-gray-500 dark:text-zinc-400 text-lg leading-relaxed">Sign in with Google to find every mailing list and frequent sender, then archive, trash, mark as read, or unsubscribe in bulk.</p>
     </div>
 
@@ -23,7 +23,7 @@
       </div>
 
       <!-- How it works -->
-      <div class="mt-8 space-y-6">
+      <div v-if="!isPwa" class="mt-8 space-y-6">
         <h2 class="text-lg font-semibold text-center text-gray-700 dark:text-zinc-200">How TrimBox works</h2>
         <div class="grid gap-4 sm:grid-cols-2">
           <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm dark:shadow-none">
@@ -72,18 +72,29 @@
             <p class="text-sm text-gray-500 dark:text-zinc-400">Select senders from the results and archive or move their emails to trash with one click, without leaving the app.</p>
           </div>
         </div>
+      </div>
 
-        <!-- Privacy callout -->
-        <div class="bg-gray-50 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800 rounded-xl px-5 py-4 text-sm text-gray-500 dark:text-zinc-400 space-y-3">
-          <p><span class="font-medium text-gray-700 dark:text-zinc-200">Gmail permission used:</span> <code class="text-xs bg-gray-100 dark:bg-zinc-800 px-1 py-0.5 rounded">https://www.googleapis.com/auth/gmail.modify</code> to read message metadata and headers during the scan, and to archive or trash emails only when you explicitly request it.</p>
-          <p><span class="font-medium text-gray-700 dark:text-zinc-200">What TrimBox stores:</span> Nothing. No email content, attachments, or personal data are stored on TrimBox servers. All processing happens in memory during the scan and is discarded when you close the tab.</p>
-          <p>
-            <span class="font-medium text-gray-700 dark:text-zinc-200">Compliance:</span>
-            TrimBox's use of Google user data adheres to the
-            <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener" class="text-orange-500 hover:text-orange-400 underline underline-offset-2 transition-colors">Google API Services User Data Policy</a>, including the Limited Use requirements. See our
-            <NuxtLink to="/privacy" class="text-orange-500 hover:text-orange-400 underline underline-offset-2 transition-colors">Privacy Policy</NuxtLink>
-            for full details.
-          </p>
+      <!-- Privacy & permissions -->
+      <div v-if="!isPwa" class="mt-8 space-y-6">
+        <h2 class="text-lg font-semibold text-center text-gray-700 dark:text-zinc-200">Privacy & permissions</h2>
+        <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm dark:shadow-none">
+          <div class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-950 flex items-center justify-center mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-orange-500" aria-hidden="true">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
+          </div>
+          <div class="text-sm text-gray-500 dark:text-zinc-400 space-y-3">
+            <p><span class="font-medium text-gray-700 dark:text-zinc-200">Gmail permission used:</span> <code class="text-xs bg-gray-100 dark:bg-zinc-800 px-1 py-0.5 rounded">https://www.googleapis.com/auth/gmail.modify</code> to read message metadata and headers during the scan, and to archive or trash emails only when you explicitly request it.</p>
+            <p><span class="font-medium text-gray-700 dark:text-zinc-200">What TrimBox stores:</span> Nothing. No email content, attachments, or personal data are stored on TrimBox servers. All processing happens in memory during the scan and is discarded when you close the tab.</p>
+            <p>
+              <span class="font-medium text-gray-700 dark:text-zinc-200">Compliance:</span>
+              TrimBox's use of Google user data adheres to the
+              <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener" class="text-orange-500 hover:text-orange-400 underline underline-offset-2 transition-colors">Google API Services User Data Policy</a>, including the Limited Use requirements. See our
+              <NuxtLink to="/privacy" class="text-orange-500 hover:text-orange-400 underline underline-offset-2 transition-colors">Privacy Policy</NuxtLink>
+              for full details.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -442,6 +453,8 @@
 </template>
 
 <script setup lang="ts">
+const { isPwa } = usePwa()
+
 interface SenderInfo {
   name: string
   email: string

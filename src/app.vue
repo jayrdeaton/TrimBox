@@ -1,8 +1,11 @@
 <template>
   <div>
-    <div class="min-h-screen bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-zinc-100 flex flex-col transition-colors duration-200">
+    <div class="fixed inset-x-0 top-0 z-50 bg-white dark:bg-zinc-900" style="height: env(safe-area-inset-top)" aria-hidden="true" />
+    <div class="fixed inset-x-0 z-30 bg-gray-200 dark:bg-zinc-800" style="top: env(safe-area-inset-top); height: 1px" aria-hidden="true" />
+    <div class="fixed inset-x-0 bottom-0 z-30 bg-gray-200 dark:bg-zinc-800" style="height: 1px" aria-hidden="true" />
+    <div class="min-h-screen bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-zinc-100 flex flex-col" :class="{ 'transition-colors duration-200': mounted }">
       <!-- Header -->
-      <header class="border-b border-gray-200 dark:border-zinc-800 px-6 pb-4 shrink-0" style="padding-top: calc(1rem + env(safe-area-inset-top))">
+      <header class="relative z-40 bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-800 px-6 pb-4 shrink-0" style="padding-top: calc(1rem + env(safe-area-inset-top))">
         <div class="max-w-3xl mx-auto flex items-center justify-between">
           <NuxtLink to="/" class="flex items-center gap-2">
             <img src="/icon.svg" alt="TrimBox" class="w-6 h-6" />
@@ -50,10 +53,12 @@
       <NuxtPage class="flex-1" />
 
       <!-- Footer -->
-      <footer class="border-t border-gray-200 dark:border-zinc-800 py-6 text-center text-sm text-gray-400 dark:text-zinc-500 shrink-0">
-        Powered by
-        <a href="https://infinitetoken.com" target="_blank" rel="noopener" class="text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 underline underline-offset-2 ml-1 transition-colors">Infinite Token</a>
-        <span class="mx-2">·</span>
+      <footer class="relative z-40 bg-white dark:bg-zinc-900 border-t border-gray-200 dark:border-zinc-800 py-6 text-center text-sm text-gray-400 dark:text-zinc-500 shrink-0">
+        <template v-if="!isPwa"
+          >Powered by
+          <a href="https://infinitetoken.com" target="_blank" rel="noopener" class="text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 underline underline-offset-2 ml-1 transition-colors">Infinite Token</a>
+          <span class="mx-2">·</span></template
+        >
         <NuxtLink to="/privacy" class="text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 underline underline-offset-2 transition-colors">Privacy Policy</NuxtLink>
         <span class="mx-2">·</span>
         <NuxtLink to="/terms" class="text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 underline underline-offset-2 transition-colors">Terms of Service</NuxtLink>
@@ -64,6 +69,11 @@
 
 <script setup lang="ts">
 const colorMode = useColorMode()
+
+const mounted = ref(false)
+onMounted(() => {
+  mounted.value = true
+})
 const isSignedIn = useState<boolean>('trimbox:isSignedIn', () => false)
 
 const handleSignOut = async () => {
@@ -71,6 +81,8 @@ const handleSignOut = async () => {
   isSignedIn.value = false
   await navigateTo('/')
 }
+
+const { isPwa } = usePwa()
 
 const cycleColorMode = () => {
   const systemIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches

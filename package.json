@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "TMPDIR=/tmp nuxt dev",
+    "dev": "nuxt dev",
     "fix": "eslint . --fix",
     "generate": "nuxt generate",
     "lint": "eslint .",
