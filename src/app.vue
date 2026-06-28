@@ -3,7 +3,7 @@
     <div class="fixed inset-x-0 top-0 z-50 bg-white dark:bg-zinc-900" style="height: env(safe-area-inset-top)" aria-hidden="true" />
     <div class="fixed inset-x-0 z-30 bg-gray-200 dark:bg-zinc-800" style="top: env(safe-area-inset-top); height: 1px" aria-hidden="true" />
     <div class="fixed inset-x-0 bottom-0 z-30 bg-gray-200 dark:bg-zinc-800" style="height: 1px" aria-hidden="true" />
-    <div class="min-h-screen bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-zinc-100 flex flex-col" :class="{ 'transition-colors duration-200': mounted }">
+    <div class="min-h-dvh bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-zinc-100 flex flex-col" :class="{ 'transition-colors duration-200': mounted }">
       <!-- Header -->
       <header class="relative z-40 bg-white dark:bg-zinc-900 border-b border-gray-200 dark:border-zinc-800 px-6 pb-4 shrink-0" style="padding-top: calc(1rem + env(safe-area-inset-top))">
         <div class="max-w-3xl mx-auto flex items-center justify-between">
@@ -54,7 +54,7 @@
 
       <!-- Footer -->
       <footer class="relative z-40 bg-white dark:bg-zinc-900 border-t border-gray-200 dark:border-zinc-800 py-6 text-center text-sm text-gray-400 dark:text-zinc-500 shrink-0">
-        <template v-if="!isPwa"
+        <template v-if="isMounted && !isPwa"
           >Powered by
           <a href="https://infinitetoken.com" target="_blank" rel="noopener" class="text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 underline underline-offset-2 ml-1 transition-colors">Infinite Token</a>
           <span class="mx-2">·</span></template
@@ -82,7 +82,7 @@ const handleSignOut = async () => {
   await navigateTo('/')
 }
 
-const { isPwa } = usePwa()
+const { isPwa, isMounted } = usePwa()
 
 const cycleColorMode = () => {
   const systemIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches

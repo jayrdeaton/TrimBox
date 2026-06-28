@@ -23,7 +23,7 @@
       </div>
 
       <!-- How it works -->
-      <div v-if="!isPwa" class="mt-8 space-y-6">
+      <div v-if="isMounted && !isPwa" class="mt-8 space-y-6">
         <h2 class="text-lg font-semibold text-center text-gray-700 dark:text-zinc-200">How TrimBox works</h2>
         <div class="grid gap-4 sm:grid-cols-2">
           <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm dark:shadow-none">
@@ -75,7 +75,7 @@
       </div>
 
       <!-- Privacy & permissions -->
-      <div v-if="!isPwa" class="mt-8 space-y-6">
+      <div v-if="isMounted && !isPwa" class="mt-8 space-y-6">
         <h2 class="text-lg font-semibold text-center text-gray-700 dark:text-zinc-200">Privacy & permissions</h2>
         <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm dark:shadow-none">
           <div class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-950 flex items-center justify-center mb-3">
@@ -453,7 +453,7 @@
 </template>
 
 <script setup lang="ts">
-const { isPwa } = usePwa()
+const { isPwa, isMounted } = usePwa()
 
 interface SenderInfo {
   name: string
