@@ -1,5 +1,5 @@
 <template>
-  <main class="flex-1 max-w-3xl mx-auto w-full px-6 pt-10 pb-14">
+  <main class="flex-1 max-w-3xl mx-auto w-full px-6 pt-10 pb-10">
     <!-- Hero -->
     <div class="mb-10 text-center">
       <h1 class="text-4xl font-bold tracking-tight mb-3">Clean up your inbox in bulk</h1>
