@@ -1,8 +1,8 @@
 diff --git a/node_modules/vue-router/dist/vue-router.cjs b/node_modules/vue-router/dist/vue-router.cjs
-index 8be64b2..0b35313 100644
+index 25237e3..a6e5ab4 100644
 --- a/node_modules/vue-router/dist/vue-router.cjs
 +++ b/node_modules/vue-router/dist/vue-router.cjs
-@@ -1903,7 +1903,7 @@ const RouterViewImpl = /* @__PURE__ */ (0, vue.defineComponent)({
+@@ -2212,7 +2212,7 @@ const RouterViewImpl = /*#__PURE__*/ (0, vue.defineComponent)({
  					path: matchedRoute.path,
  					meta: matchedRoute.meta
  				};
@@ -12,10 +12,10 @@ index 8be64b2..0b35313 100644
  				});
  			}
 diff --git a/node_modules/vue-router/dist/vue-router.esm-browser.js b/node_modules/vue-router/dist/vue-router.esm-browser.js
-index 70bac55..7ff8b8f 100644
+index be91f9d..8f77df5 100644
 --- a/node_modules/vue-router/dist/vue-router.esm-browser.js
 +++ b/node_modules/vue-router/dist/vue-router.esm-browser.js
-@@ -1899,7 +1899,7 @@ const RouterViewImpl = /* @__PURE__ */ defineComponent({
+@@ -2208,7 +2208,7 @@ const RouterViewImpl = /*#__PURE__*/ defineComponent({
  					path: matchedRoute.path,
  					meta: matchedRoute.meta
  				};
@@ -25,10 +25,10 @@ index 70bac55..7ff8b8f 100644
  				});
  			}
 diff --git a/node_modules/vue-router/dist/vue-router.global.js b/node_modules/vue-router/dist/vue-router.global.js
-index 318214b..18b9e58 100644
+index ea440c3..aa3f28f 100644
 --- a/node_modules/vue-router/dist/vue-router.global.js
 +++ b/node_modules/vue-router/dist/vue-router.global.js
-@@ -1899,7 +1899,7 @@ var VueRouter = (function(exports, vue) {
+@@ -2207,7 +2207,7 @@ var VueRouter = (function(exports, nostics, vue) {
  						path: matchedRoute.path,
  						meta: matchedRoute.meta
  					};
@@ -38,10 +38,10 @@ index 318214b..18b9e58 100644
  					});
  				}
 diff --git a/node_modules/vue-router/dist/vue-router.js b/node_modules/vue-router/dist/vue-router.js
-index 4694067..91459ed 100644
+index 012f8cb..9effeaa 100644
 --- a/node_modules/vue-router/dist/vue-router.js
 +++ b/node_modules/vue-router/dist/vue-router.js
-@@ -1080,7 +1080,7 @@ const RouterViewImpl = /* @__PURE__ */ defineComponent({
+@@ -1112,7 +1112,7 @@ const RouterViewImpl = /*#__PURE__*/ defineComponent({
  					path: matchedRoute.path,
  					meta: matchedRoute.meta
  				};
