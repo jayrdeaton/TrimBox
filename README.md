@@ -8,7 +8,7 @@ TrimBox connects to Gmail, scans up to 10,000 messages, and surfaces every bulk 
 
 - **Gmail scan**: reads only `From` and `List-Unsubscribe` headers; email body content never leaves Google's servers
 - **Mailing lists tab**: surfaces senders with unsubscribe headers, with deduplicated unsubscribe links ranked by recency
-- **Frequent senders tab**: surfaces all other high-volume senders — receipts, notifications, transactional email — grouped and sorted by volume
+- **Frequent senders tab**: surfaces all other high-volume senders (receipts, notifications, transactional email) grouped and sorted by volume
 - **Bulk actions**: archive, trash, or mark as read across all messages from selected senders at once
 - **Real-time progress**: live SSE feed as messages are processed
 - **Flexible grouping**: group results by sender domain or exact address
@@ -62,4 +62,6 @@ TrimBox requests `https://www.googleapis.com/auth/gmail.modify` to read message 
 
 ## License
 
-MIT, [Jay Deaton](https://github.com/jayrdeaton)
+The code is released under the MIT License, see [LICENSE](LICENSE).
+
+The app's name, logo, and icons, and the original artwork in this repository, are not covered by that license and remain all rights reserved. If you fork it, please give your version its own name and look.
