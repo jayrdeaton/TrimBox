@@ -350,7 +350,7 @@
                 <a v-for="(url, idx) in getVisibleUnsubscribeUrls(sender)" :key="`${sender.email}-${idx}`" :href="url" :title="url" target="_blank" rel="noopener noreferrer" class="text-xs text-orange-600 dark:text-orange-400 hover:text-orange-500 font-medium transition-colors break-all"> {{ formatUnsubscribeLabel(url, idx) }} → </a>
               </div>
               <span v-else-if="activeTab === 'all' && !mailingListEmails.has(sender.email)" class="text-[10px] font-medium text-gray-400 dark:text-zinc-500 bg-gray-100 dark:bg-zinc-800 px-1.5 py-px rounded-full leading-none">Frequent</span>
-              <span v-else class="text-xs text-gray-300 dark:text-zinc-600">—</span>
+              <span v-else class="text-xs text-gray-300 dark:text-zinc-600">-</span>
             </div>
           </div>
         </div>
